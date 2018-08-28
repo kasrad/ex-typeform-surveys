@@ -34,7 +34,7 @@ if no_n_responses > 0:
         print('Retrieving response #' + str(i))
         answers = json_normalize(resp.json()['items'][i]['answers'])\
             .loc[:, ['choices.labels', 'email', 'number',
-                    'text', 'boolean', 'field.id']]\
+                    'text', 'boolean', 'field.id', 'url']]\
             .fillna('')
 
         answers['choices.labels'] = answers['choices.labels']\
@@ -46,7 +46,8 @@ if no_n_responses > 0:
             .astype(str)
 
         answers['ans_concat'] = answers[['text', 'email', 'number',
-                                        'choices.labels', 'boolean']]\
+                                        'choices.labels', 'boolean',
+                                        'url']]\
             .apply(lambda x: ''.join(x), axis=1)
 
         results_df_tmp = answers[['field.id', 'ans_concat']]
