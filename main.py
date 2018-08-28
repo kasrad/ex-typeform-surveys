@@ -22,12 +22,12 @@ params = {'since': since
 #url and the request
 url = 'https://api.typeform.com/forms/' + form_id + '/responses'
 resp = requests.get(url=url, params=params, headers=headers)
-print('The number of new responses is: ' + len(resp.json()['items']))
+print('The number of new responses is: ' + str(len(resp.json()['items'])))
 
 #flattening the response
 results_df = pd.DataFrame(np.zeros((0, 0)))
 for i in range(len(resp.json()['items'])):
-    print('Retrieving response #' + i)
+    print('Retrieving response #' + str(i))
     answers = json_normalize(resp.json()['items'][i]['answers'])\
         .loc[:, ['choices.labels', 'email', 'number',
                  'text', 'boolean', 'field.id']]\
