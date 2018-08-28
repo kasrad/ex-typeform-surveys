@@ -60,4 +60,4 @@ for i in range(len(resp.json()['items'])):
 
 
 #write the results
-results_df.to_csv('/data/out/tables/answers.csv', index=False)
+results_df.to_csv('/data/out/tables/answers_applicants.csv', index=False)
