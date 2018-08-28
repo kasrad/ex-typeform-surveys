@@ -12,7 +12,7 @@ dayspan = cfg.get_parameters()['dayspan']
 
 #the timestamp for since should be provided in ISO 8601 format, UTC time
 #e.g. '2017-08-09T00:00:00'  August 9, 2017 at 12:00 a.m. UTC
-since = (datetime.utcnow() - timedelta(days = dayspan))\
+since = (datetime.utcnow() - timedelta(days = int(dayspan)))\
         .isoformat()
 
 headers = {'Authorization': 'bearer %s' % token}
@@ -61,7 +61,7 @@ if no_n_responses > 0:
 
     results_df.to_csv('/data/out/tables/answers_applicants.csv', index=False)
     
-    else:
+else:
         print('No new responses to fetch.')
 
 
