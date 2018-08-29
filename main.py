@@ -68,6 +68,8 @@ if no_n_responses > 0:
         #id of the question + value
         results_df_tmp = answers[['field.id', 'ans_concat']]
         results_df_tmp = results_df_tmp.set_index('field.id').T
+        results_df_tmp['id'] = [id_applicant]
+        results_df_tmp['time_submitted'] = [time_submitted]
 
         #in the first run create the df, in the following just append
         if results_df.empty:
