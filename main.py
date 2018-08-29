@@ -11,11 +11,8 @@ token = cfg.get_parameters()['#token']
 form_id = cfg.get_parameters()['form_id']
 dayspan = cfg.get_parameters()['dayspan']
 
-#the timestamp for since should be provided in ISO 8601 format, UTC time
-#e.g. '2017-08-09T00:00:00'  August 9, 2017 at 12:00 a.m. UTC
 since = (datetime.utcnow() - timedelta(days = int(dayspan)))\
         .isoformat()
-
 headers = {'Authorization': 'bearer %s' % token}
 params = {'since': since
           }
@@ -32,28 +29,47 @@ results_df = pd.DataFrame(np.zeros((0, 0)))
 if no_n_responses > 0:
     for i in range(len(resp.json()['items'])):
         print('Retrieving response #' + str(i))
-        answers = json_normalize(resp.json()['items'][i]['answers'])\
-            .loc[:, ['choices.labels', 'email', 'number',
-                    'text', 'boolean', 'field.id', 'url']]\
+        #id of the applicant + time_submitted
+        id_applicant = resp.json()['items'][i]['metadata']['referer']
+        time_submitted = resp.json()['items'][i]['submitted_at']
+
+        #create df from flattened json
+        response_df = json_normalize(resp.json()['items'][i]['answers'])
+        resp_df_cols = response_df.columns
+
+        #all the columns that could be of interest
+        all_cols_needed = ['choices.labels', 'email', 'number', 'text',
+                             'boolean', 'field.id', 'url']
+
+        #add the columns to those responses that do not contain them
+        for col_name in resp_df_cols:
+            response_df[col_name] = '' if (col_name not in all_cols_needed) \
+                                        else response_df[col_name]
+        
+        #take only the columns of interest, switch NaNs with '' for later concat
+        answers = response_df\
+            .loc[:, all_cols_needed]\
             .fillna('')
 
+        #cast the columns as strings
         answers['choices.labels'] = answers['choices.labels']\
             .astype(str)
-
         answers['number'] = answers['number']\
             .astype(str)
         answers['boolean'] = answers['boolean']\
             .astype(str)
 
+        #concat the values
         answers['ans_concat'] = answers[['text', 'email', 'number',
                                         'choices.labels', 'boolean',
                                         'url']]\
             .apply(lambda x: ''.join(x), axis=1)
 
+        #id of the question + value
         results_df_tmp = answers[['field.id', 'ans_concat']]
-
         results_df_tmp = results_df_tmp.set_index('field.id').T
 
+        #in the first run create the df, in the following just append
         if results_df.empty:
             results_df = results_df_tmp
         else:
@@ -61,13 +77,14 @@ if no_n_responses > 0:
 
         print('Response #%s retrieved' % str(i))
 
+    #write the results
     results_df.to_csv('/data/out/tables/answers_applicants.csv', index=False)
     
 else:
-        print('No new responses to fetch.')
+    print('No new responses to fetch.')
 
 
 
 
-#write the results
+
 
