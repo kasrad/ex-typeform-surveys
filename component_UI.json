@@ -1,0 +1,26 @@
+{
+  "title": "Typeform",
+  "type": "object",
+  "required": [
+    "#token",
+    "form_id",
+    "dayspan"
+  ],
+  "properties": {
+    "#token": {
+      "title": "API token",
+      "type": "string",
+      "propertyOrder": 1
+    },
+    "form_id": {
+      "title": "Id of the questionnaire",
+      "type": "string",
+      "propertyOrder": 2
+    },
+    "dayspan": {
+      "title": "How many days back you want to go?",
+      "type": "string",
+      "propertyOrder": 3
+    }
+  }
+}
