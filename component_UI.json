@@ -8,7 +8,7 @@
   ],
   "properties": {
     "#token": {
-      "title": "API token",
+      "title": "Personal access token",
       "type": "string",
       "propertyOrder": 1
     },
