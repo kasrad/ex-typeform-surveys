@@ -54,7 +54,8 @@ if no_n_responses > 0:
 
         # all the columns that could be of interest
         all_cols_needed = ['choices.labels', 'email', 'number', 'text',
-                           'boolean', 'field.id', 'url']
+                           'boolean', 'field.id', 'url', 'choice.label',
+                           'file_url', 'date', 'payment']
 
         # add the columns to those responses that do not contain them
         for col_name in resp_df_cols:
