@@ -41,6 +41,8 @@ logging.info('The number of new responses is: ' + str(no_n_responses))
 
 # flattening the response
 results_df = pd.DataFrame(np.zeros((0, 0)))
+answers_df = pd.DataFrame(np.zeros((0, 0)))
+
 if no_n_responses > 0:
     for i in range(len(resp.json()['items'])):
         logging.info('Retrieving response #' + str(i))
@@ -81,22 +83,31 @@ if no_n_responses > 0:
                                          'url']]\
             .apply(lambda x: ''.join(x), axis=1)
 
-        # id of the question + value
+               # id of the question + value
         results_df_tmp = answers[['field.id', 'ans_concat']]
         results_df_tmp = results_df_tmp.set_index('field.id').T
         results_df_tmp['id'] = [id_applicant]
         results_df_tmp['time_submitted'] = [time_submitted]
+        answers_df_tmp = answers[['field.id', 'ans_concat']]
+        answers_df_tmp.insert(0, 'id', id_applicant)
 
+        
         # in the first run create the df, in the following just append
         if results_df.empty:
             results_df = results_df_tmp
         else:
             results_df = results_df.append(results_df_tmp)
+            
+        if answers_df.empty:
+            answers_df = answers_df_tmp
+        else:
+            answers_df = answers_df.append(answers_df_tmp)
 
         logging.info('Response #%s retrieved' % str(i))
 
     # write the results
     results_df.to_csv('/data/out/tables/answers_applicants.csv', index=False)
+    answers_df.to_csv('/data/out/tables/NVP_answers_applicants.csv', index=False)
     
 else:
     logging.info('No new responses to fetch.')
