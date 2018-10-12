@@ -14,6 +14,7 @@ import numpy as np
 from keboola import docker
 from datetime import datetime, timedelta
 import logging
+import sys
 
 # Logging
 logging.basicConfig(
@@ -22,18 +23,25 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S")
 
 cfg = docker.Config('/data/')
-token = cfg.get_parameters()['#token']
-form_id = cfg.get_parameters()['form_id']
-dayspan = cfg.get_parameters()['dayspan']
 
-since = (datetime.utcnow() - timedelta(days = int(dayspan)))\
-        .isoformat()
-headers = {'Authorization': 'bearer %s' % token}
-params = {'since': since
-          }
+try:    
+    token = cfg.get_parameters()['#token']
+    form_id = cfg.get_parameters()['form_id']
+    dayspan = cfg.get_parameters()['dayspan']
+
+    since = (datetime.utcnow() - timedelta(days = int(dayspan)))\
+            .isoformat()
+    headers = {'Authorization': 'bearer %s' % token}
+    params = {'since': since
+            }
+except:
+    logging.info('Check the inputs')
+    sys.exit(1)
+
 
 
 # url and the request
+
 url = 'https://api.typeform.com/forms/' + form_id + '/responses'
 resp = requests.get(url=url, params=params, headers=headers)
 no_n_responses = len(resp.json()['items'])
