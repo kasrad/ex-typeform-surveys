@@ -1,6 +1,6 @@
 {
-  "title": "Typeform",
   "type": "object",
+  "title": "Typeform",
   "required": [
     "#token",
     "form_id",
@@ -8,19 +8,22 @@
   ],
   "properties": {
     "#token": {
-      "title": "Personal access token",
       "type": "string",
+      "format": "password",
+      "title": "Personal access token",
       "propertyOrder": 1
     },
-    "form_id": {
-      "title": "Id of the questionnaire",
-      "type": "string",
-      "propertyOrder": 2
-    },
     "dayspan": {
+      "type": "integer",
       "title": "How many days back you want to go?",
-      "type": "string",
+      "description": "denotes the start of the time interval you fetch responses from",
       "propertyOrder": 3
+    },
+    "form_id": {
+      "type": "string",
+      "title": "Id of the questionnaire",
+      "description": "can be found in the URL of the questionnaire",
+      "propertyOrder": 2
     }
   }
 }
