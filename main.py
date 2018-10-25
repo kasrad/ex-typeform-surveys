@@ -16,6 +16,10 @@ from datetime import datetime, timedelta
 import logging
 import sys
 
+if not sys.warnoptions:
+    import warnings
+    warnings.simplefilter("ignore")
+
 sys.tracebacklimit = 0
 
 # Logging
