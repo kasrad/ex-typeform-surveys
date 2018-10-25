@@ -152,12 +152,6 @@ results_df.to_csv('answers_applicants.csv', index=False)
 answers_df.to_csv('NVP_answers_applicants.csv', index=False)
 questions_df.to_csv('NVP_answers_applicants.csv', index=False)
 
-    
-
-    # write the results
-    results_df.to_csv('/data/out/tables/answers_applicants.csv', index=False)
-    answers_df.to_csv('/data/out/tables/NVP_answers_applicants.csv', index=False)
-    questions_df.to_csv('/data/out/tables/NVP_answers_applicants.csv', index=False)
 
     
 else:
