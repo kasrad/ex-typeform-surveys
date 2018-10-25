@@ -148,8 +148,8 @@ if no_n_responses > 0:
 
 
 # write the results
-results_df.to_csv('answers_applicants.csv', index=False)
-answers_df.to_csv('NVP_answers_applicants.csv', index=False)
-questions_df.to_csv('NVP_answers_applicants.csv', index=False)
+results_df.to_csv('/data/out/files/answers_applicants.csv', index=False)
+answers_df.to_csv('/data/out/files/NVP_answers_applicants.csv', index=False)
+questions_df.to_csv('/data/out/files/NVP_answers_applicants.csv', index=False)
 else:
     logging.info('No new responses to fetch.')
