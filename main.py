@@ -47,8 +47,8 @@ headers = {'Authorization': 'bearer %s' % token}
 
 # url and the request
 
-url = 'https://api.typeform.com/forms/' + form_id + '/responses'
-resp = requests.get(url=url, params=params, headers=headers)
+url_responses = 'https://api.typeform.com/forms/' + form_id + '/responses'
+resp = requests.get(url=url_responses, params=params, headers=headers)
 
 if resp.status_code != 200:
     if resp.status_code == 401 or resp.status_code == 403:
@@ -59,6 +59,8 @@ if resp.status_code != 200:
         logging.error('The response from the API is: ' + str(resp.status_code))
         sys.exit(1)
 
+url_questions = 'https://api.typeform.com/forms/' + form_id
+resp_questions = requests.get(url=url_questions, params=params, headers=headers)
 
 no_n_responses = len(resp.json()['items'])
 logging.info('The number of new responses is: ' + str(no_n_responses))
@@ -66,6 +68,7 @@ logging.info('The number of new responses is: ' + str(no_n_responses))
 # flattening the response
 results_df = pd.DataFrame(np.zeros((0, 0)))
 answers_df = pd.DataFrame(np.zeros((0, 0)))
+questions_df = pd.DataFrame(np.zeros((0, 0)))
 
 if no_n_responses > 0:
     for i in range(len(resp.json()['items'])):
@@ -129,9 +132,33 @@ if no_n_responses > 0:
 
         logging.info('Response #%s retrieved' % str(i))
 
+    for i in range(len(resp_questions.json()['fields'])):
+    question = resp_questions.json()['fields'][i]
+    question_dict = {
+                     'id': [question['id']],
+                     'title': [question['title']],
+                     'date': [str(datetime.utcnow())]
+                     }
+    questions_df_tmp = pd.DataFrame(data=question_dict)
+
+    if questions_df.empty:
+        questions_df = questions_df_tmp
+    else:
+        questions_df = questions_df.append(questions_df_tmp)
+
+
+# write the results
+results_df.to_csv('answers_applicants.csv', index=False)
+answers_df.to_csv('NVP_answers_applicants.csv', index=False)
+questions_df.to_csv('NVP_answers_applicants.csv', index=False)
+
+    
+
     # write the results
     results_df.to_csv('/data/out/tables/answers_applicants.csv', index=False)
     answers_df.to_csv('/data/out/tables/NVP_answers_applicants.csv', index=False)
+    questions_df.to_csv('/data/out/tables/NVP_answers_applicants.csv', index=False)
+
     
 else:
     logging.info('No new responses to fetch.')
