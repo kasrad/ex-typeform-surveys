@@ -16,6 +16,8 @@ from datetime import datetime, timedelta
 import logging
 import sys
 
+sys.tracebacklimit = 0
+
 # Logging
 logging.basicConfig(
     level=logging.INFO,
@@ -31,14 +33,13 @@ try:
 
     since = (datetime.utcnow() - timedelta(days = int(dayspan)))\
             .isoformat()
-    headers = {'Authorization': 'bearer %s' % token}
     params = {'since': since
             }
 except:
-    logging.info('Check the inputs')
+    logging.info('Check the inputs, please!')
     sys.exit(1)
 
-
+headers = {'Authorization': 'bearer %s' % token}
 
 # url and the request
 
