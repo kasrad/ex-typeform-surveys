@@ -45,6 +45,17 @@ headers = {'Authorization': 'bearer %s' % token}
 
 url = 'https://api.typeform.com/forms/' + form_id + '/responses'
 resp = requests.get(url=url, params=params, headers=headers)
+
+if resp.status_code != 200:
+    if resp.status_code == 401 or resp.status_code == 403:
+        logging.error('The response from the API is: ' + str(resp.status_code))
+        logging.info('Please check the form ID and your access token please.')
+        sys.exit(1)
+    else:
+        logging.error('The response from the API is: ' + str(resp.status_code))
+        sys.exit(1)
+
+
 no_n_responses = len(resp.json()['items'])
 logging.info('The number of new responses is: ' + str(no_n_responses))
 
