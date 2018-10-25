@@ -20,7 +20,7 @@ if not sys.warnoptions:
     import warnings
     warnings.simplefilter("ignore")
 
-sys.tracebacklimit = 0
+sys.tracebacklimit = None
 
 # Logging
 logging.basicConfig(
@@ -133,18 +133,18 @@ if no_n_responses > 0:
         logging.info('Response #%s retrieved' % str(i))
 
     for i in range(len(resp_questions.json()['fields'])):
-    question = resp_questions.json()['fields'][i]
-    question_dict = {
-                     'id': [question['id']],
-                     'title': [question['title']],
-                     'date': [str(datetime.utcnow())]
-                     }
-    questions_df_tmp = pd.DataFrame(data=question_dict)
+        question = resp_questions.json()['fields'][i]
+        question_dict = {
+                        'id': [question['id']],
+                        'title': [question['title']],
+                        'date': [str(datetime.utcnow())]
+                        }
+        questions_df_tmp = pd.DataFrame(data=question_dict)
 
-    if questions_df.empty:
-        questions_df = questions_df_tmp
-    else:
-        questions_df = questions_df.append(questions_df_tmp)
+        if questions_df.empty:
+            questions_df = questions_df_tmp
+        else:
+            questions_df = questions_df.append(questions_df_tmp)
 
 
 # write the results
