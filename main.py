@@ -36,7 +36,7 @@ try:
     dayspan = cfg.get_parameters()['dayspan']
 
     since = (datetime.utcnow() - timedelta(days = int(dayspan)))\
-            .isoformat()
+        .isoformat()
     params = {'since': since
             }
 except:
@@ -110,7 +110,7 @@ if no_n_responses > 0:
                                          'url']]\
             .apply(lambda x: ''.join(x), axis=1)
 
-               # id of the question + value
+        # id of the question + value
         results_df_tmp = answers[['field.id', 'ans_concat']]
         results_df_tmp = results_df_tmp.set_index('field.id').T
         results_df_tmp['id'] = [id_applicant]
@@ -151,8 +151,5 @@ if no_n_responses > 0:
 results_df.to_csv('answers_applicants.csv', index=False)
 answers_df.to_csv('NVP_answers_applicants.csv', index=False)
 questions_df.to_csv('NVP_answers_applicants.csv', index=False)
-
-
-    
 else:
     logging.info('No new responses to fetch.')
