@@ -99,6 +99,8 @@ if no_n_responses > 0:
         # cast the columns as strings
         answers['choices.labels'] = answers['choices.labels']\
             .astype(str)
+        answers['choice.label'] = answers['choice.label']\
+            .astype(str)
         answers['number'] = answers['number']\
             .astype(str)
         answers['boolean'] = answers['boolean']\
@@ -107,7 +109,7 @@ if no_n_responses > 0:
         # concat the values
         answers['ans_concat'] = answers[['text', 'email', 'number',
                                          'choices.labels', 'boolean',
-                                         'url']]\
+                                         'url', 'choice.label']]\
             .apply(lambda x: ''.join(x), axis=1)
 
         # id of the question + value
