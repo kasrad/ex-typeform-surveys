@@ -76,6 +76,7 @@ if no_n_responses > 0:
         # id of the applicant + time_submitted
         id_applicant = resp.json()['items'][i]['metadata']['referer']
         time_submitted = resp.json()['items'][i]['submitted_at']
+        id_applicant2 = resp.json()['items'][i]['landing_id']
 
         # create df from flattened json
         response_df = json_normalize(resp.json()['items'][i]['answers'])
@@ -90,7 +91,7 @@ if no_n_responses > 0:
         for col_name in resp_df_cols:
             response_df[col_name] = '' if (col_name not in all_cols_needed) \
                                     else response_df[col_name]
-        
+
         # take only the columns of interest, switch NaNs with '' for later concat
         answers = response_df\
             .loc[:, all_cols_needed]\
@@ -117,9 +118,11 @@ if no_n_responses > 0:
         results_df_tmp = results_df_tmp.set_index('field.id').T
         results_df_tmp['id'] = [id_applicant]
         results_df_tmp['time_submitted'] = [time_submitted]
+        results_df_tmp['id2'] = [id_applicant2]
         answers_df_tmp = answers[['field.id', 'ans_concat']]
         answers_df_tmp.insert(0, 'id', id_applicant)
         answers_df_tmp.insert(3, 'time_submitted', time_submitted)
+        answers_df_tmp.insert(4, 'id2', id_applicant2)
 
         
         # in the first run create the df, in the following just append
