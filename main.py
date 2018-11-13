@@ -119,6 +119,7 @@ if no_n_responses > 0:
         results_df_tmp['time_submitted'] = [time_submitted]
         answers_df_tmp = answers[['field.id', 'ans_concat']]
         answers_df_tmp.insert(0, 'id', id_applicant)
+        answers_df_tmp.insert(3, 'timestamp', time_submitted)
 
         
         # in the first run create the df, in the following just append
